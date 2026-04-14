@@ -14,7 +14,8 @@ def add_item():
     print(requests.post(f"{BASE}/items", json=data).json())
 
 while True:
-    print("\n1.View 2.Add 3.Exit")
+    print(
+        "\n1. View\n  2. Add\n   3. Exit")
     choice = input("> ")
 
     if choice == "1":

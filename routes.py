@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+import requests
 from models import inventory, find_item
 
 inventory_routes = Blueprint("inventory_routes", __name__)
@@ -17,17 +18,17 @@ def get_items():
 def update_item(item_id):
     item = find_item(item_id)
     if not item:
-        return {"error": "Not found"}, 404
+        return jsonify({"error": "Not found"}), 404
     item.update(request.json)
     return jsonify(item)
 
 @inventory_routes.route("/items/<int:item_id>", methods=["DELETE"])
 def delete_item(item_id):
     item = find_item(item_id)
+    if not item:
+        return jsonify({"error": "Not found"}), 404
     inventory.remove(item)
-    return {"message": "deleted"}
-import requests
-from flask import jsonify
+    return jsonify({"message": "deleted"})
 
 @inventory_routes.route("/external/<barcode>")
 def get_external_product(barcode):
